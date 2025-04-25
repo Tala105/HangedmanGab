@@ -19,6 +19,7 @@ class hangedMan:
         self.set_dificuldade()
         self.buffer_string = ""
 
+    # Função para escolher a dificuldade
     def set_dificuldade(self) -> int:
         txt_buffer = "Escolha a dificuldade:\n"
         for i, dificuldade in enumerate(dificuldades):
@@ -30,6 +31,7 @@ class hangedMan:
         self.dificuldade = int(dificuldade)
         self.set_variaveis_por_dificuldade()
 
+    # Função para difinir as variaveis de acordo com a dificuldade escolhida
     def set_variaveis_por_dificuldade(self) -> None:
         tentativas = [10, 7, 5]
         self.tentativas = tentativas[self.dificuldade - 1]

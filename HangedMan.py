@@ -14,8 +14,6 @@ Todas as variaveis do tipo self.algo estão inclusas no parâmetro self(importa 
 """
 class hangedMan:
     def __init__(self):
-        self.palavra_exibida = '_' * len(self.palavra)
-        self.acertos = [False] * len(self.palavra)
         self.chutes_acertados = []
         self.chutes_errados = []
         self.set_dificuldade()
@@ -25,17 +23,20 @@ class hangedMan:
         txt_buffer = "Escolha a dificuldade:\n"
         for i, dificuldade in enumerate(dificuldades):
             txt_buffer += f"{i+1} - {dificuldade.capitalize()}\n"
-        dificuldade = (input(txt_buffer))
+        dificuldade = input(txt_buffer)
         while dificuldade not in ['1', '2', '3']:
             print("Dificuldade inválida!.")
-            dificuldade = (input(txt_buffer))
+            dificuldade = input(txt_buffer)
         self.dificuldade = int(dificuldade)
+        self.set_variaveis_por_dificuldade()
 
     def set_variaveis_por_dificuldade(self) -> None:
         tentativas = [10, 7, 5]
         self.tentativas = tentativas[self.dificuldade - 1]
-        self.palavra = palavras[random.normalvariate(self.dificuldade*len(palavras)//3, 1)]
+        self.palavra = palavras[int(random.normalvariate(self.dificuldade*len(palavras)//3, 1))]
         self.palavra_clean = self.retirar_acentos(self.palavra)
+        self.palavra_exibida = '_' * len(self.palavra)
+        self.acertos = [False] * len(self.palavra)
         print(f"Dificuldade escolhida: {dificuldades[self.dificuldade - 1].capitalize()}\nTentativas: {self.tentativas}")
 
 

@@ -6,7 +6,7 @@ from numpy import clip
 with open ('Palavras.txt', 'r', encoding="UTF-8") as f:
     words = f.readlines()
 words = [word.strip().lower() for word in words]
-dificulties = ["easy", "médio", "difícil"]
+dificulties = ["easy", "average", "hard"]
 
 """
 Fiz uma classe para poder usar variaveis self (contidas na classe) e não ter que passar como parametro
@@ -48,7 +48,7 @@ class hangedMan:
         self.cleaned_word = self.clean_word(self.word)
         self.shown_word = '_' * len(self.word)
         self.acertos = [False] * len(self.word)
-        self.category = (self.dificulty - 1, len(self.word))
+        self.category = (dificulties[self.dificulty - 1], len(self.word))
 
 
     def play(self):

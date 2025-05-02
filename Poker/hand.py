@@ -1,15 +1,18 @@
 from card import Card
 import random
-from constants import RANKS, SUITS
+from constants import RANKS, SUITS, HAND_VALUES
 
 class Hand:
     """A class representing a hand of cards."""
 
-    def __init__(self, cards: list[Card], name: str = "Player", chips: int = 1000, status: str = "betting"):
+    def __init__(self, cards: list[Card], id: int, name: str = "Player", chips: int = 1000, status: str = "betting"):
+        self.id = id
         self.name = name
         self.cards = cards
         self.chips = chips
         self.status = status
+        self.betted: int = 0
+        self.hand_priority: tuple[int, int] = (0, 0)
 
     def hand_value(self) -> str:
         """Calculates the value of the hand."""
@@ -59,6 +62,13 @@ class Hand:
         if sorted_parity_check[0][1] == 0:
             return 'High Card'
         raise ValueError("No valid hand found")
+
+    def evaluate_hand(self) -> None:
+        """Evaluates the hand and assigns a priority value."""
+        hand_value = HAND_VALUES[self.hand_value()]
+        secondary_value = RANKS.index(self.sorted_hand[0].rank)
+        self.hand_priority = (hand_value, secondary_value)
+        
     
     def make_visual(self, num_cards=None) -> str:
         """Returns the visual representation of the hand."""
@@ -70,7 +80,7 @@ class Hand:
         for i, visual in enumerate(card_visuals):
             for j, line in enumerate(visual):
                 if i < len(card_visuals) - 1:
-                    if j == len(card_visuals)// 2:
+                    if j == len(card_visuals[0])// 2:
                         stacked_rows[j] += line[:2] + line[3] # Middle line shows suit
                     else:
                         stacked_rows[j] += line[:3] # Half card for first cards
@@ -87,17 +97,17 @@ class Hand:
 def main():
     hands = {
     "high_card": [Card("♠", "2"), Card("♥", "3"), Card("♠", "4"), Card("♠", "5"), Card("♠", "6")],
-    "pair": [Card("♠", "10"), Card("♠", "10"), Card("♥", "J"), Card("♠", "Q"), Card("♠", "K")],
-    "two_pair": [Card("♠", "10"), Card("♠", "10"), Card("♥", "J"), Card("♠", "J"), Card("♠", "K")],
-    "three_kind": [Card("♠", "10"), Card("♠", "10"), Card("♥", "10"), Card("♠", "J"), Card("♠", "K")],
+    "pair": [Card("♠", "10"), Card("♠", "10")],
+    "two_pair": [Card("♠", "10"), Card("♠", "10"), Card("♥", "J"), Card("♠", "J")],
+    "three_kind": [Card("♠", "10"), Card("♠", "10"), Card("♥", "10")],
     "straight": [Card("♠", "10"), Card("♠", "J"), Card("♥", "Q"), Card("♠", "K"), Card("♠", "A")],
     "flush": [Card("♠", "A"), Card("♠", "3"), Card("♠", "4"), Card("♠", "5"), Card("♠", "6")],
     "full_house": [Card("♠", "10"), Card("♠", "10"), Card("♥", "10"), Card("♠", "J"), Card("♠", "J")],
-    "four_kind": [Card("♠", "10"), Card("♠", "10"), Card("♥", "10"), Card("♠", "10"), Card("♠", "J")],
+    "four_kind": [Card("♠", "10"), Card("♦", "10"), Card("♥", "10"), Card("♣", "10")],
     "straight_flush": [Card("♠", "10"), Card("♠", "J"), Card("♠", "Q"), Card("♠", "K"), Card("♠", "A")]
     }
 
-    test_keys = ["straight", "flush", "straight_flush"]
+    test_keys = ["high_card", "pair", "two_pair", "three_kind", "straight", "flush", "full_house", "four_kind", "straight_flush"]
     
     for i, key in enumerate(test_keys):
         hand = hands[key]
